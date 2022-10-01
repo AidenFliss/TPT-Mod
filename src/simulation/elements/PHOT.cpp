@@ -19,7 +19,7 @@ void Element::Element_PHOT()
 	AirLoss = 1.00f;
 	Loss = 1.00f;
 	Collision = -0.99f;
-	Gravity = 0.0f;
+	Gravity = 0.075f;
 	Diffusion = 0.00f;
 	HotAir = 0.000f	* CFDS;
 	Falldown = 0;

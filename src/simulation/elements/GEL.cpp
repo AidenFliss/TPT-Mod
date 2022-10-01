@@ -22,8 +22,8 @@ void Element::Element_GEL()
 	HotAir = 0.000f  * CFDS;
 	Falldown = 2;
 
-	Flammable = 0;
-	Explosive = 0;
+	Flammable = 100;
+	Explosive = 990;
 	Meltable = 0;
 	Hardness = 20;
 
