@@ -22,3 +22,4 @@ extern const unsigned char color_data[];
 //extern const char plasma_data[];
 extern const unsigned char hflm_data[];
 extern const unsigned char firw_data[];
+extern const unsigned char esnd_data[];

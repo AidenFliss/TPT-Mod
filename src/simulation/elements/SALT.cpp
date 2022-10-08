@@ -13,8 +13,8 @@ void Element::Element_SALT()
 	AirDrag = 0.04f * CFDS;
 	AirLoss = 0.94f;
 	Loss = 0.95f;
-	Collision = -0.1f;
-	Gravity = 0.3f;
+	Collision = -0.4f;
+	Gravity = 0.07f;
 	Diffusion = 0.00f;
 	HotAir = 0.000f	* CFDS;
 	Falldown = 1;
@@ -24,10 +24,10 @@ void Element::Element_SALT()
 	Meltable = 5;
 	Hardness = 1;
 
-	Weight = 75;
+	Weight = 10;
 
 	HeatConduct = 110;
-	Description = "Salt, dissolves in water.";
+	Description = "Salt, dissolves in water. Very light and super SLIGHTLY bouncy.";
 
 	Properties = TYPE_PART;
 
