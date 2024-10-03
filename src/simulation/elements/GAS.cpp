@@ -14,7 +14,7 @@ void Element::Element_GAS()
 	AirLoss = 0.99f;
 	Loss = 0.30f;
 	Collision = -0.1f;
-	Gravity = 0.0f;
+	Gravity = 0.5f;
 	Diffusion = 0.75f;
 	HotAir = 0.001f	* CFDS;
 	Falldown = 0;

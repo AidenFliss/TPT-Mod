@@ -9,12 +9,12 @@ void Element::Element_DUST()
 	MenuSection = SC_POWDERS;
 	Enabled = 1;
 
-	Advection = 0.7f;
-	AirDrag = 0.02f * CFDS;
-	AirLoss = 0.96f;
-	Loss = 0.80f;
-	Collision = 0.0f;
-	Gravity = 0.1f;
+	Advection = 0.0f;
+	AirDrag = 0.00f * CFDS;
+	AirLoss = 0.01f;
+	Loss = 1.00f;
+	Collision = -0.70f;
+	Gravity = 0.050f;
 	Diffusion = 0.00f;
 	HotAir = 0.000f	* CFDS;
 	Falldown = 1;
@@ -28,7 +28,7 @@ void Element::Element_DUST()
 	Weight = 85;
 
 	HeatConduct = 70;
-	Description = "Very light dust. Flammable.";
+	Description = "Very light dust. Flammable. Slightly bouncy.";
 
 	Properties = TYPE_PART;
 
