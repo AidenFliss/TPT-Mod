@@ -27,7 +27,7 @@ jobs:
     # Step 4: Run the batch build script
     - name: Run build-release.bat
       run: |
-        build-release.bat
+        build_release.bat
       shell: cmd
 
     # Step 5: Get the latest version and bump it
