@@ -25,7 +25,7 @@ jobs:
       shell: cmd
 
     # Step 4: Run the batch build script
-    - name: Run build-release.bat
+    - name: Run build_release.bat
       run: |
         build_release.bat
       shell: cmd
