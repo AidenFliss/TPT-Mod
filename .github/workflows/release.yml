@@ -12,25 +12,31 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Step 2: Set up Git environment (for tagging releases)
+    # Step 2: Install Python, Meson, and Ninja
+    - name: Set up environment with Python, Meson, and Ninja
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade meson ninja
+
+    # Step 3: Set up Git environment (for tagging releases)
     - name: Set up Git
       run: |
         git config --global user.name "Aiden Fliss"
         git config --global user.email "aiden.fliss@gmail.com"
 
-    # Step 3: Run clean_up.bat to ensure no folder mess
+    # Step 4: Run clean_up.bat to ensure no folder mess
     - name: Clean up before build
       run: |
         clean_up.bat
       shell: cmd
 
-    # Step 4: Run the batch build script
+    # Step 5: Run the batch build script
     - name: Run build_release.bat
       run: |
         build_release.bat
       shell: cmd
 
-    # Step 5: Get the latest version and bump it
+    # Step 6: Get the latest version and bump it
     - name: Bump version number
       id: bump_version
       run: |
@@ -41,19 +47,19 @@ jobs:
         echo "new_version=$new_version" >> $GITHUB_ENV
         echo "current_version=$version" >> $GITHUB_ENV
 
-    # Step 6: Create new tag following the "r{VERSION}" format
+    # Step 7: Create new tag following the "r{VERSION}" format
     - name: Create new version tag
       run: |
         git tag r${{ env.new_version }}
         git push origin r${{ env.new_version }}
 
-    # Step 7: Create a new GitHub release and upload the .exe file
+    # Step 8: Create a new GitHub release and upload the .exe file
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: r${{ env.new_version }}  # New tag in the format "r{VERSION}"
         name: "Release ${{ env.new_version }}"  # Release title in the format "Release {VERSION}"
         body: "Updated to version ${{ env.new_version }} from ${{ env.current_version }}"  # Changelog
-        files: ./build-release/powder.exe  # Path to the executable
+        files: ./build_release/powder.exe  # Path to the executable
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
