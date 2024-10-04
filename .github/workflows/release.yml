@@ -1,0 +1,59 @@
+name: Manual Release Build
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Git environment (for tagging releases)
+    - name: Set up Git
+      run: |
+        git config --global user.name "Aiden Fliss"
+        git config --global user.email "aiden.fliss@gmail.com"
+
+    # Step 3: Run clean_up.bat to ensure no folder mess
+    - name: Clean up before build
+      run: |
+        clean_up.bat
+      shell: cmd
+
+    # Step 4: Run the batch build script
+    - name: Run build-release.bat
+      run: |
+        build-release.bat
+      shell: cmd
+
+    # Step 5: Get the latest version and bump it
+    - name: Bump version number
+      id: bump_version
+      run: |
+        # Get the latest tag (assumes tag format "rX.Y")
+        version=$(git describe --tags --abbrev=0 | sed 's/^r//')
+        # Split version and increment the last digit by .1
+        new_version=$(echo "$version" | awk -F. -v OFS=. '{$NF+=0.1; print}')
+        echo "new_version=$new_version" >> $GITHUB_ENV
+        echo "current_version=$version" >> $GITHUB_ENV
+
+    # Step 6: Create new tag following the "r{VERSION}" format
+    - name: Create new version tag
+      run: |
+        git tag r${{ env.new_version }}
+        git push origin r${{ env.new_version }}
+
+    # Step 7: Create a new GitHub release and upload the .exe file
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: r${{ env.new_version }}  # New tag in the format "r{VERSION}"
+        name: "Release ${{ env.new_version }}"  # Release title in the format "Release {VERSION}"
+        body: "Updated to version ${{ env.new_version }} from ${{ env.current_version }}"  # Changelog
+        files: ./build-release/powder.exe  # Path to the executable
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
