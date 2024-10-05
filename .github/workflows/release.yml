@@ -36,16 +36,18 @@ jobs:
         build_release.bat
       shell: cmd
 
-    # Step 6: Get the latest version and bump it
+    # Step 6: Get the latest version and bump it (PowerShell)
     - name: Bump version number
       id: bump_version
       run: |
-        # Get the latest tag (assumes tag format "rX.Y")
-        version=$(git describe --tags --abbrev=0 | sed 's/^r//')
-        # Split version and increment the last digit by .1
-        new_version=$(echo "$version" | awk -F. -v OFS=. '{$NF+=0.1; print}')
-        echo "new_version=$new_version" >> $GITHUB_ENV
-        echo "current_version=$version" >> $GITHUB_ENV
+        $version = (git describe --tags --abbrev=0) -replace '^r', ''
+        $versionParts = $version.Split('.')
+        $versionParts[-1] = [int]$versionParts[-1] + 1
+        $newVersion = $versionParts -join '.'
+        echo "new_version=$newVersion" >> $env:GITHUB_ENV
+        echo "current_version=$version" >> $env:GITHUB_ENV
+      shell: pwsh
+
 
     # Step 7: Create new tag following the "r{VERSION}" format
     - name: Create new version tag
