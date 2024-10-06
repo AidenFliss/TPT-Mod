@@ -40,14 +40,28 @@ jobs:
     - name: Bump version number
       id: bump_version
       run: |
-        $version = (git describe --tags --abbrev=0) -replace '^r', ''
+        $tagExists = git tag | Measure-Object
+        if ($tagExists.Count -eq 0) {
+          # No tags exist, start with version 1.0
+          $version = '1.0'
+        } else {
+          # Tags exist, get the latest tag in the format 'rX.Y'
+          $version = (git describe --tags --abbrev=0)
+          
+          # Ensure the tag has the 'r' prefix, then remove it
+          if ($version -like 'r*') {
+            $version = $version -replace '^r', ''
+          } else {
+            throw "Expected tag format 'r{VERSION}', but found '$version'"
+          }
+        }
+        # Split version and increment the last digit
         $versionParts = $version.Split('.')
         $versionParts[-1] = [int]$versionParts[-1] + 1
         $newVersion = $versionParts -join '.'
         echo "new_version=$newVersion" >> $env:GITHUB_ENV
         echo "current_version=$version" >> $env:GITHUB_ENV
       shell: pwsh
-
 
     # Step 7: Create new tag following the "r{VERSION}" format
     - name: Create new version tag
