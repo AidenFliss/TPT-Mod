@@ -5,6 +5,8 @@ Adds:
 - LWOD (Liquid Wood)
 - LTNT (Liquid TNT)
 - BPHT (Bouncy Photons)
+- DIRT (Dirt.)
+- MUD (Dirt but liquid.)
 
 This mod sucks. Don't use it.
 

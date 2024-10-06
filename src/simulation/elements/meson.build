@@ -195,7 +195,9 @@ simulation_elem_names = [
 	'RSSS',
 	'BPHT',
 	'LTNT',
-	'LWOD'
+	'LWOD',
+	'DIRT',
+	'MUD'
 ]
 
 simulation_elem_src = []
