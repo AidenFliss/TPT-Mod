@@ -46,8 +46,8 @@ jobs:
           # No tags exist, start with version 1.0
           $version = '1.0'
         } else {
-          # Get the latest tag with 'r' prefix
-          $version = (git tag --sort=-creatordate | Select-String '^r\d+\.\d+$' | Select-Object -First 1).ToString()
+          # Get the latest tag that matches the 'rX.Y' format
+          $version = (git tag --sort=-v:refname | Select-String '^r\d+\.\d+$' | Select-Object -First 1).ToString()
 
           # Ensure the tag has the 'r' prefix, then remove it
           if ($version -like 'r*') {
