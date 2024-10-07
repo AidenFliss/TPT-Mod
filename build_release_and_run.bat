@@ -20,7 +20,7 @@ rmdir %folder% /s /q 2>nul
 
 :skip_deletion
 :: Setup the new build target
-meson setup -Dbuildtype=release -Dstatic=prebuilt -Db_vscrt=static_from_buildtype build-release
+meson setup -Dbuildtype=release -Dstatic=prebuilt -Db_vscrt=static_from_buildtype -Dcpp_link_args="['-static','-static-libgcc','-static-libstdc++']" build-release
 cd build-release
 meson compile
 start "" "powder.exe"
