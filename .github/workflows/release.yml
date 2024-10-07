@@ -40,14 +40,15 @@ jobs:
     - name: Bump version number
       id: bump_version
       run: |
+        # Check if any tags exist
         $tagExists = git tag | Measure-Object
         if ($tagExists.Count -eq 0) {
           # No tags exist, start with version 1.0
           $version = '1.0'
         } else {
-          # Tags exist, get the latest tag in the format 'rX.Y'
-          $version = (git describe --tags --abbrev=0)
-          
+          # Get the latest tag with 'r' prefix
+          $version = (git tag --sort=-creatordate | Select-String '^r\d+\.\d+$' | Select-Object -First 1).ToString()
+
           # Ensure the tag has the 'r' prefix, then remove it
           if ($version -like 'r*') {
             $version = $version -replace '^r', ''
@@ -55,10 +56,25 @@ jobs:
             throw "Expected tag format 'r{VERSION}', but found '$version'"
           }
         }
-        # Split version and increment the last digit
+
+        # Split the version into major and minor parts
         $versionParts = $version.Split('.')
-        $versionParts[-1] = [int]$versionParts[-1] + 1
-        $newVersion = $versionParts -join '.'
+        $majorVersion = [int]$versionParts[0]
+        $minorVersion = [int]$versionParts[1]
+
+        # Increment the minor version
+        $minorVersion += 1
+
+        # Check if minor version exceeds 9
+        if ($minorVersion -gt 9) {
+          $minorVersion = 0
+          $majorVersion += 1
+        }
+
+        # Construct the new version
+        $newVersion = "$majorVersion.$minorVersion"
+
+        # Output new and current version for future steps
         echo "new_version=$newVersion" >> $env:GITHUB_ENV
         echo "current_version=$version" >> $env:GITHUB_ENV
       shell: pwsh
