@@ -1,4 +1,6 @@
 @echo off
+setlocal enabledelayedexpansion
+
 set folder="build-release"
 
 :: Check if the folder exists
@@ -20,7 +22,7 @@ rmdir %folder% /s /q 2>nul
 
 :skip_deletion
 :: Setup the new build target
-meson setup -Dbuildtype=release -Dstatic=prebuilt -Db_vscrt=static_from_buildtype -Dcpp_link_args="['-static','-static-libgcc','-static-libstdc++']" build-release
+meson setup -Dbuildtype=release -Dstatic=prebuilt -Db_vscrt=static_from_buildtype build-release
 cd build-release
 meson compile
 
